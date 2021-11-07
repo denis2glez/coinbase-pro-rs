@@ -30,7 +30,7 @@ pub struct Private<Adapter> {
 impl<A> Private<A> {
     pub fn sign(secret: &str, timestamp: u64, method: Method, uri: &str, body_str: &str) -> String {
         let key = base64::decode(secret).expect("base64::decode secret");
-        let mut mac = HmacSha256::new_varkey(&key).expect("Hmac::new(key)");
+        let mut mac = HmacSha256::new_from_slice(&key).expect("Hmac::new(key)");
         mac.update((timestamp.to_string() + method.as_str() + uri + body_str).as_bytes());
         base64::encode(&mac.finalize().into_bytes())
     }
@@ -430,14 +430,21 @@ impl<A> Private<A> {
     /// Quoted rates are subject to change. More information on fees can found on the support page.
     pub fn get_fees(&self) -> A::Result
     where
-        A: Adapter<Fees> + 'static
+        A: Adapter<Fees> + 'static,
     {
         self.call_get("/fees")
     }
 
-    pub fn get_transfers(&self, transfer_type: Option<TransferType>, profile_id: Option<String>, before: Option<DateTime>, after: Option<DateTime>, limit: Option<usize>) -> A::Result
+    pub fn get_transfers(
+        &self,
+        transfer_type: Option<TransferType>,
+        profile_id: Option<String>,
+        before: Option<DateTime>,
+        after: Option<DateTime>,
+        limit: Option<usize>,
+    ) -> A::Result
     where
-        A: Adapter<Vec<Transfer>> + 'static
+        A: Adapter<Vec<Transfer>> + 'static,
     {
         let param_type = transfer_type
             .map(|x| format!("&type={}", x))
@@ -445,17 +452,13 @@ impl<A> Private<A> {
         let param_profile_id = profile_id
             .map(|x| format!("&profile_id={}", x))
             .unwrap_or_default();
-        let param_before = before
-            .map(|x| format!("&before={}", x))
-            .unwrap_or_default();
-        let param_after = after
-            .map(|x| format!("&after={}", x))
-            .unwrap_or_default();
-        let param_limit = limit
-            .map(|x| format!("&limit={}", x))
-            .unwrap_or_default();
+        let param_before = before.map(|x| format!("&before={}", x)).unwrap_or_default();
+        let param_after = after.map(|x| format!("&after={}", x)).unwrap_or_default();
+        let param_limit = limit.map(|x| format!("&limit={}", x)).unwrap_or_default();
 
-        let mut param = (param_type + &param_profile_id + &param_before + &param_after + &param_limit).into_bytes();
+        let mut param =
+            (param_type + &param_profile_id + &param_before + &param_after + &param_limit)
+                .into_bytes();
         if !param.is_empty() {
             param[0] = b'?';
         }

@@ -7,33 +7,33 @@ description = "Coinbase pro client for Rust"
 edition = "2018"
 license = "MIT/Apache-2.0"
 readme = "README.md"
-categories = [ "api-bindings", "cryptography::cryptocurrencies" ]
-keywords = [ "exchange", "coinbase", "bitcoin", "websocket" ]
+categories = ["api-bindings", "cryptography::cryptocurrencies"]
+keywords = ["exchange", "coinbase", "bitcoin", "websocket"]
 
 [features]
 latency-tests = []
 
 [dependencies]
-async-trait = "0.1.42"
+async-trait = "0.1.51"
 base64 = "0.13.0"
-bytes = "1.0.1"
-chrono = { version = "0.4.9", features = [ "serde" ] }
-futures = { version = "0.3.8" }
-futures-util = { version = "0.3.8", features = ["compat"] }
-hmac = "0.10.1"
-hyper = { version = "0.14.2", features = ["stream", "client", "http1"] }
+bytes = "1.1.0"
+chrono = { version = "0.4.19", features = ["serde"] }
+futures = { version = "0.3.17" }
+futures-util = { version = "0.3.17", features = ["compat"] }
+hmac = "0.11.0"
+hyper = { version = "0.14.14", features = ["stream", "client", "http1"] }
 hyper-tls = "0.5.0"
-log = "0.4.4"
+log = "0.4.14"
 pretty_env_logger = "0.4.0"
-serde = { version = "1.0", features = ["derive"] }
-serde_json = "1.0"
-sha2 = "0.9.2"
-thiserror = "1.0.22"
-time = "0.2.24"
-tokio = { version = "1.0.2", features = ["full"] }
-tokio-tungstenite = { version = "0.13.0", features = ["tls"] }
-url = "2.1.0"
-uuid = { version = "0.8.1", features = [ "serde", "v4" ] }
+serde = { version = "1.0.130", features = ["derive"] }
+serde_json = "1.0.69"
+sha2 = "0.9.8"
+thiserror = "1.0.30"
+time = "0.3.4"
+tokio = { version = "1.13.0", features = ["full"] }
+tokio-tungstenite = { version = "0.15.0", features = ["native-tls"] }
+url = "2.2.2"
+uuid = { version = "0.8.2", features = ["serde", "v4"] }
 
 [dev-dependencies]
 serial_test = "0.5.1"
